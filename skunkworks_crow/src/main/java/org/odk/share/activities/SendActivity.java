@@ -433,10 +433,8 @@ public class SendActivity extends InjectableActivity {
             case LOCATION_PERMISSION_REQUEST_CODE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     toggleHotspot();
-                }
-                else
-                    {
-                    Toast.makeText(this, R.string.loction_permission_needed, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, getString(R.string.location_permission_needed), Toast.LENGTH_SHORT).show();
                     this.finish();
                 }
                 break;

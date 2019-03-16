@@ -242,12 +242,9 @@ public class MainActivity extends FormListActivity implements LoaderManager.Load
 
         switch (requestCode) {
             case STORAGE_PERMISSION_REQUEST_CODE:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     setUpLoader();
-                }
-                else {
-
+                } else {
                     showNoPermissionView();
                 }
         }
@@ -256,7 +253,7 @@ public class MainActivity extends FormListActivity implements LoaderManager.Load
     private void showNoPermissionView() {
 
         setEmptyViewVisibility(0);
-        emptyView.setText(R.string.provide_storage_permission);
+        emptyView.setText(getString(R.string.provide_storage_permission));
     }
 
     private void setUpLoader() {
@@ -272,8 +269,7 @@ public class MainActivity extends FormListActivity implements LoaderManager.Load
             } else {
                 showAlertDialog();
             }
-        } else
-            {
+        } else {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE , Manifest.permission.READ_EXTERNAL_STORAGE},
                     STORAGE_PERMISSION_REQUEST_CODE);
         }
