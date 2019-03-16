@@ -436,7 +436,7 @@ public class SendActivity extends InjectableActivity {
                 }
                 else
                     {
-                    Toast.makeText(this, "Location Permission Needed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.loction_permission_needed, Toast.LENGTH_SHORT).show();
                     this.finish();
                 }
                 break;

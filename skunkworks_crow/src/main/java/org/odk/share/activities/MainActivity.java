@@ -256,7 +256,7 @@ public class MainActivity extends FormListActivity implements LoaderManager.Load
     private void showNoPermissionView() {
 
         setEmptyViewVisibility(0);
-        emptyView.setText("Click here to give storage permission");
+        emptyView.setText(R.string.provide_storage_permission);
     }
 
     private void setUpLoader() {
