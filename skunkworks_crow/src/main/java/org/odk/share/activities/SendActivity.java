@@ -351,28 +351,38 @@ public class SendActivity extends InjectableActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void turnOnHotspot() {
         WifiManager manager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        manager.startLocalOnlyHotspot(new WifiManager.LocalOnlyHotspotCallback() {
 
-            @Override
-            public void onStarted(WifiManager.LocalOnlyHotspotReservation reservation) {
-                super.onStarted(reservation);
-                hotspotReservation = reservation;
-                currentConfig = reservation.getWifiConfiguration();
-                startSending();
-            }
+        if (!isLocationTurnedOn()) {
+            new AlertDialog.Builder(this)
+                    .setMessage(R.string.gps_network_not_enabled)
+                    .setPositiveButton(R.string.open_location_settings, (paramDialogInterface, paramInt) ->
+                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                    .setNegativeButton(R.string.Cancel, null)
+                    .show();
+        } else {
+            manager.startLocalOnlyHotspot(new WifiManager.LocalOnlyHotspotCallback() {
 
-            @Override
-            public void onStopped() {
-                super.onStopped();
-                Timber.d("Local Hotspot Stopped");
-            }
+                @Override
+                public void onStarted(WifiManager.LocalOnlyHotspotReservation reservation) {
+                    super.onStarted(reservation);
+                    hotspotReservation = reservation;
+                    currentConfig = reservation.getWifiConfiguration();
+                    startSending();
+                }
 
-            @Override
-            public void onFailed(int reason) {
-                super.onFailed(reason);
-                Timber.d("Local Hotspot failed to start");
-            }
-        }, new Handler());
+                @Override
+                public void onStopped() {
+                    super.onStopped();
+                    Timber.d("Local Hotspot Stopped");
+                }
+
+                @Override
+                public void onFailed(int reason) {
+                    super.onFailed(reason);
+                    Timber.d("Local Hotspot failed to start");
+                }
+            }, new Handler());
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -427,28 +437,20 @@ public class SendActivity extends InjectableActivity {
         alertDialog.show();
     }
 
-    private void checkLocation() {
+    private boolean isLocationTurnedOn() {
 
         LocationManager lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
-        boolean network_enabled = false;
+//        boolean network_enabled = false;
 
         try {
             gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
         } catch(Exception ignored) {}
 
-        try {
-            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        } catch(Exception ignored) {}
+//        try {
+//            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+//        } catch(Exception ignored) {}
 
-        if(!gps_enabled && !network_enabled) {
-            // notify user
-            new AlertDialog.Builder(this)
-                    .setMessage(R.string.gps_network_not_enabled)
-                    .setPositiveButton(R.string.open_location_settings, (paramDialogInterface, paramInt) ->
-                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
-                    .setNegativeButton(R.string.Cancel,null)
-                    .show();
-        }
+        return gps_enabled;
     }
 }
