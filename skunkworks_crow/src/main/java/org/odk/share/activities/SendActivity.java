@@ -477,18 +477,15 @@ public class SendActivity extends InjectableActivity {
 
     private boolean isLocationTurnedOn() {
 
-        LocationManager lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
-        boolean gps_enabled = false;
-//        boolean network_enabled = false;
+        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        boolean isGpsEnabled = false;
 
         try {
-            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch(Exception ignored) {}
+            isGpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception ignored) {
+            Timber.e(ignored);
+        }
 
-//        try {
-//            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-//        } catch(Exception ignored) {}
-
-        return gps_enabled;
+        return isGpsEnabled;
     }
 }
